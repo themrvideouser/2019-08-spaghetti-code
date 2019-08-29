@@ -86,7 +86,6 @@ function main(int $argc, array $argv): void
 
     $m = (($month - 2 - 1) + 12) % 12 + 1; // this is because of the modulo
 
-    // TODO: repair the double if($m checked twice)
     if ($m >= 11) {
         $c = substr($year - 1, 0, 2);
         $y = substr($year - 1, 2, 2);
