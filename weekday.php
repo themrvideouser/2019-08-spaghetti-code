@@ -78,15 +78,17 @@ function handleCommandLine(int $argc, array $argv): array
     return [$day, $month, $year];
 }
 
-function main(int $argc, array $argv): void
+/**
+ * @param $month
+ * @param $year
+ * @param $day
+ * @return array
+ */
+function calculateWeekdayNumber($month, $year, $day): array
 {
-    setlocale(LC_TIME, 'de_AT.utf-8');
+    $julianMonth = (($month - 2 - 1) + 12) % 12 + 1; // this is because of the modulo
 
-    list($day, $month, $year) = handleCommandLine($argc, $argv);
-
-    $m = (($month - 2 - 1) + 12) % 12 + 1; // this is because of the modulo
-
-    if ($m >= 11) {
+    if ($julianMonth >= 11) {
         $c = substr($year - 1, 0, 2);
         $y = substr($year - 1, 2, 2);
     } else {
@@ -94,14 +96,25 @@ function main(int $argc, array $argv): void
         $y = substr($year, 2, 2);
     }
 
-    $weekdayNumber = ($day + intval(2.6 * $m - 0.2) + $y + intval($y / 4) + intval($c / 4) - 2 * $c) % 7;
+    $weekdayNumber = ($day + intval(2.6 * $julianMonth - 0.2) + $y + intval($y / 4) + intval($c / 4) - 2 * $c) % 7;
+    return array($julianMonth, $c, $y, $weekdayNumber);
+}
+
+function main(int $argc, array $argv): void
+{
+    setlocale(LC_TIME, 'de_AT.utf-8');
+
+    list($day, $month, $year) = handleCommandLine($argc, $argv);
+
+    list($julianMonth, $c, $y, $weekdayNumber) = calculateWeekdayNumber($month, $year, $day);
 
     $weekday = getWeekdayName($weekdayNumber);
 
     printEingabe($day, $month, $year);
     printAusgabe($year, $month, $day);
-    printDebugOutput($weekday, $m, $y, $c);
+    printDebugOutput($weekday, $julianMonth, $y, $c);
 }
+
 
 main($argc, $argv);
 
