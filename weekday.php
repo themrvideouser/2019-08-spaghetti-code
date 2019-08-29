@@ -38,7 +38,6 @@ $weekDayNames = [
     "Samstag",
 ];
 $weekday = $weekDayNames[$w];
-
 echo "Eingabe: {$day}.{$month}.{$year}\n";
 echo strftime("Berechnung PHP: Wochentag='%A'\n",strtotime("$year-$month-$day"));
 echo "Berechnung Algorithmus: Wochentag='{$weekday}'\n";
